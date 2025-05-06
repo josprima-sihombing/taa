@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { guestRouteLoader, protectedRouteLoader } from "@/utils/auth-loader";
 import PageLoader from "@/components/page-loader";
 
+import "./App.css";
+
 const router = createBrowserRouter([
   {
     path: "/",
