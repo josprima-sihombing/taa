@@ -10,22 +10,38 @@ import {
 } from "@mantine/core";
 import { Controller } from "react-hook-form";
 import classes from "./login.module.css";
-import { useLogin, useLoginForm } from "@/hooks/auth/use-auth";
+import { useRegister, useRegisterForm } from "@/hooks/auth/use-auth";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { NavLink } from "react-router";
 
-export default function LoginPage() {
-  const { login, isPending, error: apiError } = useLogin();
-  const { handleSubmit, control, errors } = useLoginForm();
+export default function RegisterPage() {
+  const { register, isPending, error: apiError } = useRegister();
+  const { handleSubmit, control, errors } = useRegisterForm();
 
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form}>
         <Title order={2} className={classes.title}>
-          Welcome back!
+          Create an account
         </Title>
 
-        <form onSubmit={handleSubmit(login)}>
+        <form onSubmit={handleSubmit(register)}>
+          <Controller
+            control={control}
+            name="username"
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                disabled={isPending}
+                error={errors.username?.message}
+                label="Username"
+                placeholder="John"
+                size="md"
+                radius="md"
+              />
+            )}
+          />
+
           <Controller
             control={control}
             name="email"
@@ -36,6 +52,7 @@ export default function LoginPage() {
                 error={errors.email?.message}
                 label="Email address"
                 placeholder="hello@gmail.com"
+                mt="md"
                 size="md"
                 radius="md"
               />
@@ -52,6 +69,23 @@ export default function LoginPage() {
                 error={errors.password?.message}
                 label="Password"
                 placeholder="Your password"
+                mt="md"
+                size="md"
+                radius="md"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <PasswordInput
+                {...field}
+                disabled={isPending}
+                error={errors.confirmPassword?.message}
+                label="Confirm Password"
+                placeholder="Confirm password"
                 mt="md"
                 size="md"
                 radius="md"
@@ -80,14 +114,14 @@ export default function LoginPage() {
             radius="md"
             type="submit"
           >
-            Login
+            Create account
           </Button>
         </form>
 
         <Text ta="center" mt="md">
-          Don&apos;t have an account?{" "}
-          <Anchor component={NavLink} to="/register" fw={500}>
-            Register
+          Already have an account?{" "}
+          <Anchor component={NavLink} to="/login" fw={500}>
+            Login
           </Anchor>
         </Text>
       </Paper>

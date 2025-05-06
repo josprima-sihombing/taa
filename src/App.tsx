@@ -6,6 +6,8 @@ import { guestRouteLoader, protectedRouteLoader } from "@/utils/auth-loader";
 import PageLoader from "@/components/page-loader";
 
 import "./App.css";
+import "@mantine/notifications/styles.css";
+import { Notifications } from "@mantine/notifications";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,13 @@ const router = createBrowserRouter([
           Component: async () => (await import("@/pages/login")).default,
         },
       },
+      {
+        path: "/register",
+        loader: guestRouteLoader,
+        lazy: {
+          Component: async () => (await import("@/pages/register")).default,
+        },
+      },
     ],
   },
 ]);
@@ -39,6 +48,7 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <MantineProvider>
+      <Notifications position="top-center" />
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
