@@ -1,5 +1,7 @@
 import API from "@/utils/api";
 import type { AxiosResponse } from "axios";
+import type { Article, CreateArticleData, GetArticleParams } from "./types";
+import type { GetListResponse, GetOneResponse } from "../common";
 
 interface ArticleRepository {
   getList: (
@@ -32,45 +34,4 @@ export const articleRepository: ArticleRepository = {
   async updateOne(id, data) {
     return API.put<GetOneResponse<Article>>(`/articles/${id}`, data);
   },
-};
-
-export type GetArticleParams = {
-  page: number;
-  limit: number;
-  title: string;
-  category: string;
-};
-
-export type CreateArticleData = {
-  title: string;
-  description: string;
-  cover_image_url: string;
-  category: string;
-};
-
-export type Article = {
-  id: number;
-  documentId: string;
-  title: string;
-  description: string;
-  cover_image_url: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-};
-
-export type GetOneResponse<T> = {
-  data: T;
-};
-
-export type GetListResponse<T> = {
-  data: T[];
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
 };
