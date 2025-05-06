@@ -1,17 +1,22 @@
 import API from "@/utils/api";
+import type { AxiosResponse } from "axios";
 
 interface UserRepository {
-  register: (userData: UserRegisterData) => Promise<UserLoginResponse>;
-  login: (userCredential: UserCredential) => Promise<UserLoginResponse>;
+  register: (
+    userData: UserRegisterData,
+  ) => Promise<AxiosResponse<UserLoginResponse>>;
+  login: (
+    userCredential: UserCredential,
+  ) => Promise<AxiosResponse<UserLoginResponse>>;
   getDetail: () => Promise<UserDetail>;
 }
 
 const userRepository: UserRepository = {
   async register(userData) {
-    return API.post("/auth/local/register", userData);
+    return API.post<UserLoginResponse>("/auth/local/register", userData);
   },
   async login(credential) {
-    return API.post("/auth/local", credential);
+    return API.post<UserLoginResponse>("/auth/local", credential);
   },
   async getDetail() {
     return API.get("/users/me");
@@ -27,7 +32,9 @@ export type User = {
   password: string;
 };
 
-export type UserCredential = Pick<User, "email" | "password">;
+export type UserCredential = Pick<User, "password"> & {
+  identifier: string;
+};
 
 export type UserRegisterData = Pick<User, "email" | "password" | "username">;
 
