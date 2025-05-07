@@ -34,7 +34,7 @@ export function Navbar() {
     <nav className={classes.navbar}>
       <div className={classes.header}>
         <Group justify="space-between">
-          <Title order={2}>Travel Article</Title>
+          <Title order={5}>Travel Article App</Title>
           <Code fw={700}>{APP_VERSION}</Code>
         </Group>
       </div>
