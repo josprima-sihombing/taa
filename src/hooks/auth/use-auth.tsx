@@ -143,7 +143,7 @@ export function useLogin() {
 
             notifications.show({
               color: "green",
-              title: "Success",
+              title: "Welcome!",
               message: "Login successful",
             });
 
