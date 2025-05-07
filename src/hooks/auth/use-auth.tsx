@@ -3,6 +3,7 @@ import userRepository, {
   type UserLoginResponse,
   type UserRegisterData,
 } from "@/repositories/user/user-repository";
+import { useUserStore } from "@/stores/auth-store";
 import { formatAPIError, type ApiRequestError } from "@/utils/format-api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalStorage } from "@mantine/hooks";
@@ -14,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 
-const TOKEN_KEY = "token";
+export const TOKEN_KEY = "token";
 
 const registerSchema = z
   .object({
@@ -48,7 +49,7 @@ export function useRegisterForm() {
 export function useRegister() {
   const navigate = useNavigate();
   const [formattedError, setFormattedError] = useState<string | null>(null);
-  const [, setToken] = useLocalStorage({ key: TOKEN_KEY });
+  const setUser = useUserStore((state) => state.setUser);
 
   const { data, mutate, isPending } = useMutation<
     AxiosResponse<UserLoginResponse>,
@@ -73,7 +74,15 @@ export function useRegister() {
             setFormattedError(formatAPIError(error));
           },
           onSuccess: (response) => {
-            setToken(response.data.jwt);
+            const { user, jwt } = response.data;
+
+            setUser({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              token: jwt,
+            });
+
             notifications.show({
               color: "green",
               title: "Success",
@@ -86,7 +95,7 @@ export function useRegister() {
         },
       );
     },
-    [mutate, setToken, navigate],
+    [mutate, navigate, setUser],
   );
 
   return {
@@ -100,7 +109,7 @@ export function useRegister() {
 export function useLogin() {
   const navigate = useNavigate();
   const [formattedError, setFormattedError] = useState<string | null>(null);
-  const [, setToken] = useLocalStorage({ key: TOKEN_KEY });
+  const setUser = useUserStore((state) => state.setUser);
 
   const { data, mutate, isPending } = useMutation<
     AxiosResponse<UserLoginResponse>,
@@ -124,7 +133,20 @@ export function useLogin() {
             setFormattedError(formatAPIError(error));
           },
           onSuccess: (response) => {
-            setToken(response.data.jwt);
+            const { user, jwt } = response.data;
+            setUser({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              token: jwt,
+            });
+
+            notifications.show({
+              color: "green",
+              title: "Success",
+              message: "Login successful",
+            });
+
             navigate("/", {
               replace: true,
             });
@@ -132,7 +154,7 @@ export function useLogin() {
         },
       );
     },
-    [mutate, setToken, navigate],
+    [mutate, navigate, setUser],
   );
 
   return {
