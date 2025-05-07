@@ -1,19 +1,20 @@
+import { useUserStore } from "@/stores/auth-store";
 import { redirect } from "react-router";
 
 export async function protectedRouteLoader() {
-  const token = localStorage.getItem("token");
+  const user = useUserStore.getState().user;
 
-  if (!token) {
+  if (!user) {
     return redirect("/login");
   }
 
-  return { token };
+  return user;
 }
 
 export async function guestRouteLoader() {
-  const token = localStorage.getItem("token");
+  const user = useUserStore.getState().user;
 
-  if (token) {
+  if (user) {
     return redirect("/");
   }
 

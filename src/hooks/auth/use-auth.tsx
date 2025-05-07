@@ -6,7 +6,6 @@ import userRepository, {
 import { useUserStore } from "@/stores/auth-store";
 import { formatAPIError, type ApiRequestError } from "@/utils/format-api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocalStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
@@ -134,6 +133,7 @@ export function useLogin() {
           },
           onSuccess: (response) => {
             const { user, jwt } = response.data;
+
             setUser({
               id: user.id,
               username: user.username,
@@ -200,15 +200,21 @@ export function useUserDetail() {
 }
 
 export function useLogout() {
-  const [, , removeValue] = useLocalStorage({ key: TOKEN_KEY });
+  const clearUser = useUserStore((state) => state.clearUser);
   const navigate = useNavigate();
 
   const logout = useCallback(() => {
-    removeValue();
+    clearUser();
     navigate("/login", {
       replace: true,
     });
-  }, [removeValue, navigate]);
+
+    notifications.show({
+      color: "green",
+      title: "Success",
+      message: "Logout successfully",
+    });
+  }, [navigate, clearUser]);
 
   return {
     logout,

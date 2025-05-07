@@ -8,6 +8,7 @@ import PageLoader from "@/components/page-loader";
 import "./App.css";
 import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
+import DashboardLayout from "./layouts/dashboard-layout";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         loader: protectedRouteLoader,
+        element: <DashboardLayout />,
         children: [
           {
             index: true,
