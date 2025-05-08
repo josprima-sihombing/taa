@@ -50,7 +50,7 @@ export function Navbar() {
       <Modal opened={opened} onClose={close} title="Confirmation">
         <Text>Are you sure you want to logout?</Text>
 
-        <Group mt="xl">
+        <Group mt="xl" justify="flex-end">
           <Button onClick={close} variant="outline">
             Cancel
           </Button>
